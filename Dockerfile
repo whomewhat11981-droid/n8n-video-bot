@@ -1,14 +1,6 @@
-# Base: official n8n image
-FROM n8nio/n8n
-
-# Switch to root to install extra tools
-USER root
-
-# Install ffmpeg + python3 + yt-dlp
-RUN apt-get update && \
-    apt-get install -y ffmpeg python3-pip && \
-    pip install yt-dlp && \
-    rm -rf /var/lib/apt/lists/*
-
-# Switch back to n8n user
-USER node
+FROM python:3.10-slim
+RUN apt-get update && apt-get install -y ffmpeg && \
+    pip install flask yt-dlp
+COPY app.py /app/app.py
+WORKDIR /app
+CMD ["python3", "app.py"]
